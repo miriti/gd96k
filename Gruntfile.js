@@ -3,13 +3,21 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
         concat: {
             dist: {
-                src: ['src/*.js'],
+                src: [
+                    'src/data.js',
+                    'src/common.js',
+                    'src/DisplayObjectContainer.js',
+                    'src/main.js'
+                ],
                 dest: 'bin/concated.js'
             }
         },
+        jshint: {
+            dist: ['src/*.js']
+        },
         uglify: {
             options: {
-                maxLineLen: 7000,
+                maxLineLen: 2000,
                 mangle: {
                     sort: true,
                     toplevel: true
@@ -41,15 +49,33 @@ module.exports = function (grunt) {
                     'bin/tmp.js': ['bin/concated.js']
                 }
             }
-        }
+        },
+        base64: {
+            prepare: {
+                files: {
+                    'src/data.b64': ['src/imagedata.gif']
+                }
+            }
+        },
+    });
+
+    grunt.registerTask('writeData', function () {
+        grunt.task.requires('base64');
+
+        var base64 = grunt.file.read('src/data.b64');
+
+        grunt.file.write('src/data.js', "var imageData = 'data:image/gif;base64," + base64 + "';\n");
     });
 
     grunt.registerTask('pack', 'Packing the final executable', function () {
         grunt.task.requires('uglify');
 
         grunt.file.defaultEncoding = 'utf8';
-        
-        var code = "<!doctype html><html><body><script>" + grunt.file.read('bin/tmp.js') + "</script></body></html>";
+
+        var html_begin = grunt.file.read('src/html_begin.html');
+        var html_end = grunt.file.read('src/html_end.html');
+
+        var code = html_begin + "\n" + grunt.file.read('bin/tmp.js') + "\n" + html_end;
 
         grunt.file.write('bin/game.html', code);
     });
@@ -61,7 +87,10 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-base64');
     grunt.loadNpmTasks('grunt-contrib-compress');
 
-    grunt.registerTask('default', ['concat', 'uglify', 'pack', 'cleanup']);
+    grunt.registerTask('prepare', ['base64', 'writeData']);
+    grunt.registerTask('default', ['jshint', 'prepare', 'concat', 'uglify', 'pack', 'cleanup']);
 };
