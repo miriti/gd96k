@@ -4,9 +4,13 @@ module.exports = function (grunt) {
         concat: {
             dist: {
                 src: [
-                    'src/data.js',
                     'src/common.js',
+                    'src/data.js',
+                    'src/Input.js',
                     'src/DisplayObjectContainer.js',
+                    'src/Character.js',
+                    'src/GameScene.js',
+                    'src/Game.js',
                     'src/main.js'
                 ],
                 dest: 'bin/concated.js'
@@ -15,38 +19,15 @@ module.exports = function (grunt) {
         jshint: {
             dist: ['src/*.js']
         },
-        uglify: {
-            options: {
-                maxLineLen: 2000,
-                mangle: {
-                    sort: true,
-                    toplevel: true
-                },
-                compress: {
-                    sequences: true,
-                    properties: true,
-                    conditionals: true,
-                    booleans: true,
-                    unused: true,
-                    if_return: true,
-                    join_vars: true,
-                    screw_ie8: true,
-                    dead_code: true,
-                    comparisons: true,
-                    evaluate: true,
-                    loops: true,
-                    warnings: true,
-                    drop_console: true
-                },
-                squeeze: {
-                    dead_code: true
-                },
-                report: ['gzip'],
-                preserveComments: 'all'
-            },
+        'closure-compiler': {
             dist: {
-                files: {
-                    'bin/tmp.js': ['bin/concated.js']
+                closurePath: '/usr/local/opt/closure-compiler/libexec',
+                js: 'bin/concated.js',
+                jsOutputFile: 'bin/tmp.js',
+                maxBuffer: 96,
+                options: {
+                    compilation_level: 'ADVANCED_OPTIMIZATIONS',
+                    language_in: 'ECMASCRIPT5_STRICT'
                 }
             }
         },
@@ -56,8 +37,13 @@ module.exports = function (grunt) {
                     'src/data.b64': ['src/imagedata.gif']
                 }
             }
-        },
+        }
     });
+
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-base64');
+    grunt.loadNpmTasks('grunt-closure-compiler');
 
     grunt.registerTask('writeData', function () {
         grunt.task.requires('base64');
@@ -68,14 +54,14 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('pack', 'Packing the final executable', function () {
-        grunt.task.requires('uglify');
+        grunt.task.requires('closure-compiler');
 
         grunt.file.defaultEncoding = 'utf8';
 
         var html_begin = grunt.file.read('src/html_begin.html');
         var html_end = grunt.file.read('src/html_end.html');
 
-        var code = html_begin + "\n" + grunt.file.read('bin/tmp.js') + "\n" + html_end;
+        var code = html_begin + grunt.file.read('bin/tmp.js') + html_end;
 
         grunt.file.write('bin/game.html', code);
     });
@@ -85,12 +71,6 @@ module.exports = function (grunt) {
         grunt.file.delete('bin/tmp.js');
     });
 
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-base64');
-    grunt.loadNpmTasks('grunt-contrib-compress');
-
     grunt.registerTask('prepare', ['base64', 'writeData']);
-    grunt.registerTask('default', ['jshint', 'prepare', 'concat', 'uglify', 'pack', 'cleanup']);
+    grunt.registerTask('default', ['jshint', 'prepare', 'concat', 'closure-compiler', 'pack', 'cleanup']);
 };
