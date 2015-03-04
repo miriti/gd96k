@@ -8,6 +8,11 @@ gd96.DisplayObjectContainer = function () {
     this.x = 0;
     this.y = 0;
     this.rotation = 0;
+    this.scale = new gd96.Math.Vector2(1, 1);
+    this.parent = null;
+    this.visible = true;
+    this.width = 0;
+    this.height = 0;
 };
 gd96.extend(gd96.DisplayObjectContainer, null);
 
@@ -66,6 +71,7 @@ gd96.DisplayObjectContainer.prototype.circle = function (ctx, cx, cy, r, fill, s
  */
 gd96.DisplayObjectContainer.prototype.addChild = function (child) {
     this.children.push(child);
+    child.parent = this;
 };
 
 /**
@@ -77,6 +83,8 @@ gd96.DisplayObjectContainer.prototype.removeChild = function (child) {
     var index = this.children.indexOf(child);
 
     if (index != -1) {
+        var c = this.children[index];
+        c.parent = null;
         this.children.splice(index, 1);
     }
 };
@@ -87,7 +95,7 @@ gd96.DisplayObjectContainer.prototype.removeChild = function (child) {
  * @param delta
  */
 gd96.DisplayObjectContainer.prototype.update = function (delta) {
-    for (var i in this.children) {
+    for (var i = this.children.length - 1; i >= 0; i--) {
         this.children[i].update(delta);
     }
 };
@@ -98,7 +106,10 @@ gd96.DisplayObjectContainer.prototype.update = function (delta) {
  * @param ctx
  */
 gd96.DisplayObjectContainer.prototype.render = function (ctx) {
+    if (!this.visible)return;
+
     ctx.translate(this.x, this.y);
+    ctx.scale(this.scale.x, this.scale.y);
     ctx.rotate(this.rotation);
 
     if (this.children.length > 0) {
@@ -108,4 +119,8 @@ gd96.DisplayObjectContainer.prototype.render = function (ctx) {
             ctx.restore();
         }
     }
+};
+
+gd96.DisplayObjectContainer.prototype.intersects = function (doWith) {
+    return ((Math.abs(doWith.x - this.x) < (this.width + doWith.width) / 2) && (Math.abs(doWith.y - this.y) < (this.height + doWith.height) / 2));
 };

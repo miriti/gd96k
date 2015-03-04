@@ -7,8 +7,12 @@ module.exports = function (grunt) {
                     'src/common.js',
                     'src/data.js',
                     'src/Input.js',
+                    'src/Math.js',
                     'src/DisplayObjectContainer.js',
+                    'src/Quad.js',
                     'src/Character.js',
+                    'src/Enemy.js',
+                    'src/Player.js',
                     'src/GameScene.js',
                     'src/Game.js',
                     'src/main.js'

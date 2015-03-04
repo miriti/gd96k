@@ -9,7 +9,7 @@
         h = 600,
         canvas = document.createElement('canvas'),
         ctx = canvas.getContext('2d'),
-        lastTime = gd96.timestamp(),
+        lastTime = gd96.timestamp,
         game = new gd96.Game();
 
     canvas.width = w;
@@ -28,12 +28,14 @@
     game.setState(new gd96.GameScene());
 
     var render = function () {
-        var currentTime = gd96.timestamp();
+        gd96.tick();
+
+        var currentTime = gd96.timestamp;
         var delta = currentTime - lastTime;
         lastTime = currentTime;
 
         ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.fillStyle = '#111';
+        ctx.fillStyle = gd96.palette[0];
         ctx.fillRect(0, 0, w, h);
 
         game.update(delta / 1000);
