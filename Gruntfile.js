@@ -4,19 +4,19 @@ module.exports = function (grunt) {
         concat: {
             dist: {
                 src: [
-                    'src/common.js',
+                    'src/lib/common.js',
                     'src/data.js',
-                    'src/Input.js',
-                    'src/Math.js',
-                    'src/DisplayObjectContainer.js',
-                    'src/Quad.js',
-                    'src/Doll.js',
-                    'src/Character.js',
-                    'src/Enemy.js',
-                    'src/Player.js',
-                    'src/GameScene.js',
+                    'src/core/Input.js',
+                    'src/lib/Math.js',
+                    'src/core/DisplayObjectContainer.js',
+                    'src/core/Quad.js',
+                    'src/core/Doll.js',
+                    'src/core/Character.js',
+                    'src/characters/Enemy.js',
+                    'src/characters/Player.js',
+                    'src/core/GameScene.js',
                     'src/scenes/Cafe.js',
-                    'src/Game.js',
+                    'src/core/Game.js',
                     'src/main.js'
                 ],
                 dest: 'bin/concated.js'
