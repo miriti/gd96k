@@ -121,6 +121,11 @@ gd96.DisplayObjectContainer.prototype.render = function (ctx) {
     }
 };
 
+/**
+ *
+ * @param doWith
+ * @returns {boolean}
+ */
 gd96.DisplayObjectContainer.prototype.intersects = function (doWith) {
     return ((Math.abs(doWith.x - this.x) < (this.width + doWith.width) / 2) && (Math.abs(doWith.y - this.y) < (this.height + doWith.height) / 2));
 };

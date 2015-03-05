@@ -25,20 +25,28 @@
         gd96.Input.keyup(e);
     });
 
-    game.setState(new gd96.GameScene());
+    game.setState(new gd96.Scenes.Cafe());
 
     var render = function () {
         gd96.tick();
 
         var currentTime = gd96.timestamp;
-        var delta = currentTime - lastTime;
+        var delta = (currentTime - lastTime) / 1000;
         lastTime = currentTime;
 
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.fillStyle = gd96.palette[0];
         ctx.fillRect(0, 0, w, h);
 
-        game.update(delta / 1000);
+        var interval = 0.02;
+
+        if (delta > interval) {
+            do {
+                game.update(interval);
+                delta -= interval;
+            } while (delta > interval);
+        }
+        game.update(delta);
         game.render(ctx);
 
         requestAnimationFrame(render);
@@ -46,4 +54,3 @@
 
     render();
 })(document, window);
-

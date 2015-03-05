@@ -1,7 +1,7 @@
 /**
  * Input
  *
- * @type Object
+ * @enum {number}
  */
 gd96.Input = {
     /**

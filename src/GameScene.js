@@ -1,3 +1,11 @@
+/**
+ *
+ * @param x
+ * @param y
+ * @param w
+ * @param h
+ * @constructor
+ */
 gd96.GameSceneObstacle = function (x, y, w, h) {
     this.x = x || 0;
     this.y = y || 0;
@@ -11,23 +19,14 @@ gd96.extend(gd96.GameSceneObstacle, null);
  * Game Scene
  *
  * @constructor
+ * @extends gd96.DisplayObjectContainer
  */
 gd96.GameScene = function () {
     gd96.DisplayObjectContainer.call(this);
 
     this.characters = [];
     this.obstacles = [];
-
-    this.addChild(new gd96.Player());
-
-    var enemy = new gd96.Enemy();
-    enemy.x = 300;
-    enemy.y = 300;
-
-    this.addChild(enemy);
-
-    this.addObstacle(new gd96.GameSceneObstacle(260, 100, 500, 20));
-    this.addObstacle(new gd96.GameSceneObstacle(380, 300, 40, 600));
+    this.player = new gd96.Player();
 };
 
 gd96.extend(gd96.GameScene, gd96.DisplayObjectContainer);
@@ -44,6 +43,17 @@ gd96.GameScene.prototype.addObstacle = function (obstacle) {
     debugQuad.x = obstacle.x - obstacle.width / 2;
     debugQuad.y = obstacle.y - obstacle.height / 2;
     this.addChild(debugQuad);
+};
+
+/**
+ *
+ * @param obstacle
+ */
+gd96.GameScene.prototype.removeObstacle = function (obstacle) {
+    var index = this.obstacles.indexOf(obstacle);
+    if (index != -1) {
+        this.obstacles.splice(index, 1);
+    }
 };
 
 /**
@@ -71,3 +81,5 @@ gd96.GameScene.prototype.removeChild = function (child) {
         this.characters.splice(index, 1);
     }
 };
+
+gd96.Scenes = {};

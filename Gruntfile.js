@@ -10,10 +10,12 @@ module.exports = function (grunt) {
                     'src/Math.js',
                     'src/DisplayObjectContainer.js',
                     'src/Quad.js',
+                    'src/Doll.js',
                     'src/Character.js',
                     'src/Enemy.js',
                     'src/Player.js',
                     'src/GameScene.js',
+                    'src/scenes/Cafe.js',
                     'src/Game.js',
                     'src/main.js'
                 ],
@@ -27,7 +29,7 @@ module.exports = function (grunt) {
             dist: {
                 closurePath: '/usr/local/opt/closure-compiler/libexec',
                 js: 'bin/concated.js',
-                jsOutputFile: 'bin/tmp.js',
+                jsOutputFile: 'bin/compiled.js',
                 maxBuffer: 96,
                 options: {
                     compilation_level: 'ADVANCED_OPTIMIZATIONS',
@@ -65,14 +67,17 @@ module.exports = function (grunt) {
         var html_begin = grunt.file.read('src/html_begin.html');
         var html_end = grunt.file.read('src/html_end.html');
 
-        var code = html_begin + grunt.file.read('bin/tmp.js') + html_end;
+        var code = html_begin + grunt.file.read('bin/compiled.js') + html_end;
 
         grunt.file.write('bin/game.html', code);
+
+        var full_code = html_begin + grunt.file.read('bin/concated.js') + html_end;
+        grunt.file.write('bin/game_full.html', full_code);
     });
 
     grunt.registerTask('cleanup', 'Clean up', function () {
-        grunt.file.delete('bin/concated.js');
-        grunt.file.delete('bin/tmp.js');
+        //grunt.file.delete('bin/concated.js');
+        //grunt.file.delete('bin/compiled.js');
     });
 
     grunt.registerTask('prepare', ['base64', 'writeData']);

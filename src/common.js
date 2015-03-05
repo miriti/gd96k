@@ -5,11 +5,29 @@ var gd96 = {};
 
 gd96.palette = ['1c1c1c', '393939', '565656', '727272', '8f8f8f', 'adadad', 'cacaca', 'e6e6e6'];
 
+/**
+ * Extend one Function from another
+ *
+ * @param ch
+ * @param pa
+ */
 gd96.extend = function (ch, pa) {
     if (pa !== null) {
         ch.prototype = Object.create(pa.prototype);
     }
     ch.prototype.constructor = ch;
+};
+
+/**
+ * Copy attributes from one object to another
+ *
+ * @param from
+ * @param to
+ */
+gd96.copyAttributes = function (from, to) {
+    for (var f in from) {
+        to[f] = from[f];
+    }
 };
 
 gd96.timestamp = 0;

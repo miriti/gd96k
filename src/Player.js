@@ -2,6 +2,7 @@
  * Player
  *
  * @constructor
+ * @extends gd96.Character
  */
 gd96.Player = function () {
     gd96.Character.call(this);
@@ -17,21 +18,31 @@ gd96.extend(gd96.Player, gd96.Character);
  * @override
  */
 gd96.Player.prototype.update = function (delta) {
-
+    var running = false;
     if (gd96.Input.keysPressed[gd96.Input.KEY_LEFT]) {
         this.x -= this.speed * delta;
+        running = true;
     }
 
     if (gd96.Input.keysPressed[gd96.Input.KEY_RIGHT]) {
         this.x += this.speed * delta;
+        running = true;
     }
 
     if (gd96.Input.keysPressed[gd96.Input.KEY_UP]) {
         this.y -= this.speed * delta;
+        running = true;
     }
 
     if (gd96.Input.keysPressed[gd96.Input.KEY_DOWN]) {
         this.y += this.speed * delta;
+        running = true;
+    }
+
+    if (running) {
+        this.doll.initAnimation("Running");
+    } else {
+        this.doll.initAnimation("Idle");
     }
 
     if (gd96.Input.keysPressed[gd96.Input.KEY_Z]) {

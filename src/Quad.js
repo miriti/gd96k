@@ -1,8 +1,17 @@
-gd96.Quad = function (w, h, col) {
+/**
+ *
+ * @param w {number}
+ * @param h {number}
+ * @param col {string}
+ * @constructor
+ * @extends gd96.DisplayObjectContainer
+ */
+gd96.Quad = function (w, h, col, pivot) {
     gd96.DisplayObjectContainer.call(this);
-    this.width = w;
-    this.height = h;
-    this.color = col;
+    this.width = w || 100;
+    this.height = h || 100;
+    this.color = col || gd96.palette[0];
+    this.pivot = pivot || new gd96.Math.Vector2(0, 0);
 };
 
 gd96.extend(gd96.Quad, gd96.DisplayObjectContainer);
@@ -14,5 +23,5 @@ gd96.extend(gd96.Quad, gd96.DisplayObjectContainer);
  */
 gd96.Quad.prototype.render = function (ctx) {
     gd96.DisplayObjectContainer.prototype.render.call(this, ctx);
-    this.rect(ctx, 0, 0, this.width, this.height, this.color);
+    this.rect(ctx, -this.pivot.x, -this.pivot.y, this.width, this.height, this.color);
 };
