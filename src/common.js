@@ -18,18 +18,6 @@ gd96.extend = function (ch, pa) {
     ch.prototype.constructor = ch;
 };
 
-/**
- * Copy attributes from one object to another
- *
- * @param from
- * @param to
- */
-gd96.copyAttributes = function (from, to) {
-    for (var f in from) {
-        to[f] = from[f];
-    }
-};
-
 gd96.timestamp = 0;
 
 gd96.tick = function () {
