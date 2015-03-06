@@ -4,7 +4,7 @@
  * @constructor
  */
 gd96.DisplayObjectContainer = function () {
-    this.children = [];
+    this.ch = [];
     this.x = 0;
     this.y = 0;
     this.rotation = 0;
@@ -24,7 +24,7 @@ gd96.extend(gd96.DisplayObjectContainer, null);
  * @param stroke
  * @param lineWidth
  */
-gd96.DisplayObjectContainer.prototype.fillStroke = function (ctx, fill, stroke, lineWidth) {
+gd96.DisplayObjectContainer.prototype.fs = function (ctx, fill, stroke, lineWidth) {
     ctx.fillStyle = '#' + fill;
     ctx.strokeStyle = '#' + stroke;
     ctx.lineWidth = lineWidth;
@@ -41,7 +41,7 @@ gd96.DisplayObjectContainer.prototype.fillStroke = function (ctx, fill, stroke, 
  * @param col
  */
 gd96.DisplayObjectContainer.prototype.rect = function (ctx, x, y, w, h, col) {
-    this.fillStroke(ctx, col, '000', 1);
+    this.fs(ctx, col, '000', 1);
     ctx.fillRect(x, y, w, h);
 };
 
@@ -58,7 +58,7 @@ gd96.DisplayObjectContainer.prototype.rect = function (ctx, x, y, w, h, col) {
  */
 gd96.DisplayObjectContainer.prototype.circle = function (ctx, cx, cy, r, fill, stroke, lineWidth) {
     ctx.beginPath();
-    this.fillStroke(ctx, fill || 'f00', stroke || '000', lineWidth || 1);
+    this.fs(ctx, fill || 'f00', stroke || '000', lineWidth || 1);
     ctx.arc(cx, cx, r, 0, Math.PI * 2, false);
     ctx.fill();
     ctx.stroke();
@@ -69,8 +69,8 @@ gd96.DisplayObjectContainer.prototype.circle = function (ctx, cx, cy, r, fill, s
  *
  * @param child
  */
-gd96.DisplayObjectContainer.prototype.addChild = function (child) {
-    this.children.push(child);
+gd96.DisplayObjectContainer.prototype.add = function (child) {
+    this.ch.push(child);
     child.parent = this;
 };
 
@@ -79,13 +79,13 @@ gd96.DisplayObjectContainer.prototype.addChild = function (child) {
  *
  * @param child
  */
-gd96.DisplayObjectContainer.prototype.removeChild = function (child) {
-    var index = this.children.indexOf(child);
+gd96.DisplayObjectContainer.prototype.rem = function (child) {
+    var index = this.ch.indexOf(child);
 
     if (index != -1) {
-        var c = this.children[index];
+        var c = this.ch[index];
         c.parent = null;
-        this.children.splice(index, 1);
+        this.ch.splice(index, 1);
     }
 };
 
@@ -95,8 +95,8 @@ gd96.DisplayObjectContainer.prototype.removeChild = function (child) {
  * @param delta
  */
 gd96.DisplayObjectContainer.prototype.update = function (delta) {
-    for (var i = this.children.length - 1; i >= 0; i--) {
-        this.children[i].update(delta);
+    for (var i = this.ch.length - 1; i >= 0; i--) {
+        this.ch[i].update(delta);
     }
 };
 
@@ -105,17 +105,17 @@ gd96.DisplayObjectContainer.prototype.update = function (delta) {
  *
  * @param ctx
  */
-gd96.DisplayObjectContainer.prototype.render = function (ctx) {
+gd96.DisplayObjectContainer.prototype.rndr = function (ctx) {
     if (!this.visible)return;
 
     ctx.translate(this.x, this.y);
     ctx.scale(this.scale.x, this.scale.y);
     ctx.rotate(this.rotation);
 
-    if (this.children.length > 0) {
-        for (var i in this.children) {
+    if (this.ch.length > 0) {
+        for (var i in this.ch) {
             ctx.save();
-            this.children[i].render(ctx);
+            this.ch[i].rndr(ctx);
             ctx.restore();
         }
     }

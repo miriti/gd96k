@@ -5,11 +5,16 @@ module.exports = function (grunt) {
             dist: {
                 src: [
                     'src/lib/common.js',
+                    'src/lib/lib/Interpolation.js',
                     'src/data.js',
                     'src/core/Input.js',
                     'src/lib/Math.js',
                     'src/core/DisplayObjectContainer.js',
                     'src/core/Quad.js',
+                    'src/core/dollAnimations/Animation.js',
+                    'src/core/dollAnimations/Idle.js',
+                    'src/core/dollAnimations/Running.js',
+                    'src/core/dollAnimations/Hit.js',
                     'src/core/Doll.js',
                     'src/core/Character.js',
                     'src/characters/Enemy.js',
@@ -76,8 +81,8 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('cleanup', 'Clean up', function () {
-        //grunt.file.delete('bin/concated.js');
-        //grunt.file.delete('bin/compiled.js');
+        grunt.file.delete('bin/concated.js');
+        grunt.file.delete('bin/compiled.js');
     });
 
     grunt.registerTask('prepare', ['base64', 'writeData']);

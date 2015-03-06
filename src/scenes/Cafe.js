@@ -8,14 +8,12 @@ gd96.Scenes.Cafe = function () {
 
     this.player.x = 400;
     this.player.y = 300;
-    this.addChild(this.player);
+    this.add(this.player);
 
     var enemy = new gd96.Enemy();
-    enemy.x = 100;
-    enemy.y = 100;
-
-    enemy.doll.initAnimation('Running');
-    this.addChild(enemy);
+    enemy.x = 300;
+    enemy.y = 300;
+    this.add(enemy);
 };
 
 gd96.extend(gd96.Scenes.Cafe, gd96.GameScene);

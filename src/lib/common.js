@@ -24,4 +24,20 @@ gd96.tick = function () {
     gd96.timestamp = new Date().getTime();
 };
 
+gd96.rnd = function () {
+    return Math.random();
+};
+
+gd96.sin = function (a) {
+    return Math.sin(a);
+};
+
+gd96.cos = function (a) {
+    return Math.cos(a);
+};
+
+gd96.atan2 = function (y, x) {
+    return Math.atan2(y, x);
+};
+
 gd96.tick();

@@ -15,7 +15,7 @@ gd96.Character = function () {
     this.doll = new gd96.Doll();
     this.doll.y = -50;
 
-    this.addChild(this.doll);
+    this.add(this.doll);
 };
 gd96.extend(gd96.Character, gd96.DisplayObjectContainer);
 
@@ -53,7 +53,7 @@ gd96.Character.prototype.update = function (delta) {
             this.visible = Math.floor(gd96.timestamp / this.deathBlinkInterval) % 2 === 0;
             this.deathAnimationTime += delta;
         } else {
-            this.parent.removeChild(this);
+            this.parent.rem(this);
         }
     }
 };

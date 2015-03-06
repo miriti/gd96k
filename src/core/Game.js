@@ -39,7 +39,7 @@ gd96.Game.prototype.update = function (delta) {
  *
  * @param ctx
  */
-gd96.Game.prototype.render = function (ctx) {
+gd96.Game.prototype.rndr = function (ctx) {
     if (this._currentState !== null)
-        this._currentState.render(ctx);
+        this._currentState.rndr(ctx);
 };

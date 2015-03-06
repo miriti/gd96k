@@ -47,7 +47,7 @@
             } while (delta > interval);
         }
         game.update(delta);
-        game.render(ctx);
+        game.rndr(ctx);
 
         requestAnimationFrame(render);
     };

@@ -1,80 +1,5 @@
-gd96.DollAnimations = {};
-
 /**
- *
- * @constructor
- */
-gd96.DollAnimations.Animation = function (doll) {
-    this.doll = doll;
-    this.phase = 0;
-};
-gd96.extend(gd96.DollAnimations.Animation, null);
-
-/**
- * Update animation
- *
- * @param delta
- */
-gd96.DollAnimations.Animation.prototype.update = function (delta) {
-    this.phase += Math.PI * delta;
-};
-
-/**
- * Idle Animation
- *
- * @param doll
- * @constructor
- * @extends gd96.DollAnimations.Animation
- */
-gd96.DollAnimations.Idle = function (doll) {
-
-    gd96.DollAnimations.Animation.call(this, doll);
-
-    this.doll.legs.leftLeg.x = -8;
-    this.doll.legs.leftLeg.y = -0;
-
-    this.doll.legs.rightLeg.x = 8;
-    this.doll.legs.rightLeg.y = -0;
-};
-gd96.extend(gd96.DollAnimations.Idle, gd96.DollAnimations.Animation);
-
-/**
- * Update Idle animation
- *
- * @param delta
- */
-gd96.DollAnimations.Idle.prototype.update = function (delta) {
-    gd96.DollAnimations.Animation.prototype.update.call(this, delta);
-    //this.doll.topPart.y = 5 + Math.sin(this.phase) * 5;
-};
-
-/**
- * Run animation
- *
- * @param doll
- * @constructor
- * @extends gd96.DollAnimations.Animation
- */
-gd96.DollAnimations.Running = function (doll) {
-    gd96.DollAnimations.Animation.call(this, doll);
-    doll.topPart.y = 0;
-};
-
-/**
- * Update run animation
- *
- * @param delta
- */
-gd96.DollAnimations.Running.prototype.update = function (delta) {
-    gd96.DollAnimations.Animation.prototype.update.call(this, delta);
-    this.doll.legs.leftLeg.x = -8 + Math.sin(this.phase * 10) * 3;
-    this.doll.legs.leftLeg.y = -3 + Math.cos(this.phase * 10) * 3;
-
-    this.doll.legs.rightLeg.x = 8 + Math.cos(this.phase * 5) * 3;
-    this.doll.legs.rightLeg.y = -3 + Math.sin(this.phase * 10) * 3;
-};
-
-/**
+ * @todo Refactor this mess
  *
  * @constructor
  * @extends gd96.DisplayObjectContainer
@@ -83,27 +8,38 @@ gd96.Doll = function () {
     gd96.DisplayObjectContainer.call(this);
 
     this.topPart = new gd96.DisplayObjectContainer();
-    this.topPart.body = new gd96.Quad(30, 60, gd96.palette[7], new gd96.Math.Vector2(15, 60));
-    this.topPart.addChild(this.topPart.body);
+
+    this.topPart.lowerHand = new gd96.Quad(40, 6, gd96.palette[4], new gd96.Math.Vector2(0, 3));
+    this.topPart.lowerHand.y = -45;
+    this.topPart.add(this.topPart.lowerHand);
+
+
+    this.topPart.body = new gd96.Quad(30, 60, gd96.palette[6], new gd96.Math.Vector2(15, 60));
+    this.topPart.add(this.topPart.body);
 
     this.topPart.head = new gd96.Quad(15, 30, gd96.palette[7], new gd96.Math.Vector2(7.5, 30));
-    this.topPart.head.x = 0;
     this.topPart.head.y = -60;
-    this.topPart.addChild(this.topPart.head);
+    this.topPart.add(this.topPart.head);
+
+    this.topPart.topHand = new gd96.Quad(50, 6, gd96.palette[7], new gd96.Math.Vector2(0, 3));
+    this.topPart.topHand.x = 0;
+    this.topPart.topHand.y = -50;
+    this.topPart.add(this.topPart.topHand);
 
     this.legs = new gd96.DisplayObjectContainer();
 
     this.legs.leftLeg = new gd96.Quad(8, 50, gd96.palette[7], new gd96.Math.Vector2(4, 0));
     this.legs.leftLeg.x = -8;
-    this.legs.addChild(this.legs.leftLeg);
+    this.legs.add(this.legs.leftLeg);
 
     this.legs.rightLeg = new gd96.Quad(8, 50, gd96.palette[7], new gd96.Math.Vector2(4, 0));
     this.legs.rightLeg.x = 8;
-    this.legs.addChild(this.legs.rightLeg);
+    this.legs.add(this.legs.rightLeg);
 
-    this.addChild(this.topPart);
-    this.addChild(this.legs);
+    this.add(this.legs);
+    this.add(this.topPart);
 
+    this.animationStack = [];
     this.animation = null;
     this.currentAnimation = "";
 
@@ -126,9 +62,21 @@ gd96.Doll.prototype.initAnimation = function (anim) {
             case 'Running':
                 this.animation = new gd96.DollAnimations.Running(this);
                 break;
+            case 'Hit':
+                this.animation = new gd96.DollAnimations.Hit(this);
+                break;
         }
 
+        if (this.currentAnimation != '') {
+            this.animationStack.push(this.currentAnimation);
+        }
         this.currentAnimation = anim;
+    }
+};
+
+gd96.Doll.prototype.popAnimation = function () {
+    if (this.animationStack.length > 0) {
+        this.initAnimation(this.animationStack.pop());
     }
 };
 

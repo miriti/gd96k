@@ -42,7 +42,7 @@ gd96.GameScene.prototype.addObstacle = function (obstacle) {
     var debugQuad = new gd96.Quad(obstacle.width, obstacle.height, 'faa');
     debugQuad.x = obstacle.x - obstacle.width / 2;
     debugQuad.y = obstacle.y - obstacle.height / 2;
-    this.addChild(debugQuad);
+    this.add(debugQuad);
 };
 
 /**
@@ -61,8 +61,8 @@ gd96.GameScene.prototype.removeObstacle = function (obstacle) {
  * @param child
  * @override
  */
-gd96.GameScene.prototype.addChild = function (child) {
-    gd96.DisplayObjectContainer.prototype.addChild.call(this, child);
+gd96.GameScene.prototype.add = function (child) {
+    gd96.DisplayObjectContainer.prototype.add.call(this, child);
     if (child instanceof gd96.Character) {
         this.characters.push(child);
     }
@@ -73,8 +73,8 @@ gd96.GameScene.prototype.addChild = function (child) {
  * @param child
  * @override
  */
-gd96.GameScene.prototype.removeChild = function (child) {
-    gd96.DisplayObjectContainer.prototype.removeChild.call(this, child);
+gd96.GameScene.prototype.rem = function (child) {
+    gd96.DisplayObjectContainer.prototype.rem.call(this, child);
 
     var index = this.characters.indexOf(child);
     if (index != -1) {

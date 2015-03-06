@@ -21,7 +21,7 @@ gd96.extend(gd96.Quad, gd96.DisplayObjectContainer);
  * @param ctx
  * @override
  */
-gd96.Quad.prototype.render = function (ctx) {
-    gd96.DisplayObjectContainer.prototype.render.call(this, ctx);
+gd96.Quad.prototype.rndr = function (ctx) {
+    gd96.DisplayObjectContainer.prototype.rndr.call(this, ctx);
     this.rect(ctx, -this.pivot.x, -this.pivot.y, this.width, this.height, this.color);
 };
